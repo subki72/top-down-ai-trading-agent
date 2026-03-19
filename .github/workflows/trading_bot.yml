@@ -2,10 +2,9 @@ name: Autonomous Top-Down Trading Agent
 
 on:
   schedule:
-    # Executes every hour at minute 0 (e.g., 07:00, 08:00, 09:00)
-    - cron: '0 * * * *'
+    # Runs every hour at minute 0, from 11:00 UTC (18:00 WIB) to 23:00 UTC (06:00 WIB)
+    - cron: '0 11-23 * * *'
   
-  # Allows manual execution from the GitHub interface
   workflow_dispatch:
 
 jobs:
