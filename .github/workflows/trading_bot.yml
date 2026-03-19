@@ -2,15 +2,12 @@ name: Autonomous Top-Down Trading Agent
 
 on:
   schedule:
-    # 11:00 UTC = 18:00 WIB sampai 23:00 UTC = 06:00 WIB
     - cron: '0 11-23 * * *'
   workflow_dispatch:
 
 jobs:
   execute-trading-cycle:
     runs-on: ubuntu-latest
-    # ... (sisanya tetep sama ke bawah)
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
