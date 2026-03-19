@@ -1,16 +1,17 @@
 name: AI Auto Trader
+
 on:
   push:
     branches: [ main ]
-  schedule:
-    - cron: '*/5 * * * *'  # Kita biarin tiap 5 menit dulu buat ngetes
-  workflow_dispatch:
-jobs:
+  workflow_dispatch:  
 
+jobs:
   execute-trading-cycle:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Python
