@@ -33,10 +33,5 @@ jobs:
           LANGCHAIN_ENDPOINT: ${{ secrets.LANGCHAIN_ENDPOINT }}
           LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
           LANGCHAIN_PROJECT: ${{ secrets.LANGCHAIN_PROJECT }}
-<<<<<<< HEAD
         run: python main.py
-=======
-        run: |
-          python main.py
->>>>>>> 6b149198acc4e25ba3ed2c4069b62335f6b999d9
 
