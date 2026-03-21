@@ -1,34 +1,32 @@
-# tools/indicators.py
 import ta
+import pandas as pd
 
-def calculate_indicators(df):
+def calculate_technical_indicators(df: pd.DataFrame):
     """
-    Receives a raw price DataFrame, calculates technical indicators,
-    and returns the values ONLY for the latest candlestick.
+    Calculates RSI and MACD Histogram using the 'ta' library.
+    Returns a dictionary of the most recent values.
     """
-    print("[TOOLS - INDICATORS] Calculating RSI, MACD, and Moving Average Volume...")
+    print("[INDICATORS] Processing technical analysis...")
     
     try:
-        # Calculate indicators for the entire DataFrame
+        # RSI Calculation
         df['RSI'] = ta.momentum.RSIIndicator(close=df['close'], window=14).rsi()
-        macd = ta.trend.MACD(close=df['close'])
-        df['MACD_Histogram'] = macd.macd_diff() 
-        df['Volume_MA20'] = df['volume'].rolling(window=20).mean()
+        
+        # MACD Calculation
+        macd_calc = ta.trend.MACD(close=df['close'])
+        df['MACD_HIST'] = macd_calc.macd_diff() 
 
-        # Extract the latest row (real-time data)
-        latest_data = df.iloc[-1]
-
-        # Return results as a structured dictionary
-        indicator_results = {
-            "rsi": latest_data['RSI'],
-            "macd_hist": latest_data['MACD_Histogram'],
-            "current_volume": latest_data['volume'],
-            "avg_volume": latest_data['Volume_MA20']
+        latest = df.iloc[-1]
+        
+        results = {
+            "rsi": round(float(latest['RSI']), 2),
+            "macd_hist": round(float(latest['MACD_HIST']), 4),
+            "last_close": float(latest['close'])
         }
         
-        print("[TOOLS - INDICATORS] Calculations completed successfully.")
-        return indicator_results
+        print(f"[INDICATORS] Metrics: RSI {results['rsi']} | MACD Hist {results['macd_hist']}")
+        return results
 
     except Exception as e:
-        print(f"[TOOLS - INDICATORS ERROR] Failed to calculate indicators: {e}")
+        print(f"[ERROR] Indicator calculation failed: {str(e)}")
         return None

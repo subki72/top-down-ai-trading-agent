@@ -1,38 +1,36 @@
-# tools/market_data.py
 import ccxt
 import pandas as pd
-from config.settings import TF_MACRO, TF_MICRO, TF_TRIGGER
+from datetime import datetime
+from state import TradingState
 
-def get_multi_timeframe_data(symbol='BTC/USDT', limit=100):
+def fetch_market_data(state: TradingState):
     """
-    Fetches data across 3 timeframes simultaneously: Macro (1h), Micro (15m), and Trigger (5m).
+    Fetches multi-timeframe OHLCV data from Kraken.
+    Prepares raw strings for LLM analysis.
     """
-    print(f"[TOOLS - MARKET DATA] Initializing Top-Down data retrieval for {symbol}...")
+    asset = state['asset_pair']
+    print(f"[DATA_FETCHER] Fetching data for {asset}...")
+    exchange = ccxt.kraken()
     
     try:
-        exchange = ccxt.kraken()
-        market_data = {}
+        # Fetching raw data
+        ohlcv_h1 = exchange.fetch_ohlcv(asset, '1h', limit=24)
+        ohlcv_m15 = exchange.fetch_ohlcv(asset, '15m', limit=20)
+        ohlcv_m5 = exchange.fetch_ohlcv(asset, '5m', limit=5)
         
-        # Define timeframe mapping
-        timeframe_mapping = {
-            'macro': TF_MACRO,
-            'micro': TF_MICRO,
-            'trigger': TF_TRIGGER
+        def format_candles(candles):
+            formatted = ""
+            for c in candles:
+                timestamp = datetime.fromtimestamp(c[0]/1000).strftime('%H:%M')
+                formatted += f"[{timestamp}] O:{c[1]} H:{c[2]} L:{c[3]} C:{c[4]} V:{c[5]}\n"
+            return formatted
+            
+        return {
+            "data_h1_raw": format_candles(ohlcv_h1), 
+            "data_m15_raw": format_candles(ohlcv_m15), 
+            "data_m5_raw": format_candles(ohlcv_m5),
+            "execution_logs": ["Successfully retrieved multi-timeframe market data"]
         }
-        
-        # Sequentially fetch data for each timeframe
-        for tf_name, tf_value in timeframe_mapping.items():
-            print(f"  -> Fetching {tf_name} data ({tf_value})...")
-            bars = exchange.fetch_ohlcv(symbol, timeframe=tf_value, limit=limit)
-            
-            df = pd.DataFrame(bars, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
-            df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
-            
-            market_data[tf_name] = df
-            
-        print("[TOOLS - MARKET DATA] All timeframe data successfully retrieved.")
-        return market_data
-        
     except Exception as e:
-        print(f"[TOOLS - MARKET DATA ERROR] Failed to connect to exchange: {e}")
-        return None
+        print(f"[ERROR] Market data acquisition failed: {str(e)}")
+        return {"execution_logs": [f"Market data error: {str(e)}"]}

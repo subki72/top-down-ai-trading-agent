@@ -1,52 +1,40 @@
-# agents/trigger_agent.py
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
-from config.settings import GROQ_API_KEY
+from langchain_groq import ChatGroq
+from langchain_core.prompts import PromptTemplate
+from state import TradingState
 
-def analyze_trigger_entry(df_5m):
-    print("[AGENT 3] Sniper is monitoring for trigger entries on the 5m timeframe...")
+def analyze_entry_trigger_m5(state: TradingState):
+    """
+    Identifies specific candlestick confirmation on the M5 timeframe.
+    Provides exact price levels for Entry, Stop Loss, and Take Profit.
+    """
+    asset = state['asset_pair']
+    context = state['micro_signal_m15']
+    raw_data = state['data_m5_raw']
+    print(f"[M5_AGENT] Calculating precision trigger for {asset}...")
     
-    llm = ChatOpenAI(
-        api_key=GROQ_API_KEY, 
-        base_url="https://api.groq.com/openai/v1", 
-        model="llama-3.1-8b-instant", 
-        temperature=0.0
-    )
-    parser = JsonOutputParser()
+    # Utilizing Llama 3.1 8B for fast, structured output
+    llm = ChatGroq(temperature=0, model_name="llama-3.1-8b-instant")
     
-    system_prompt = """
-    You are an Execution Trigger Specialist (Sniper Agent).
-    Your ONLY task is to find very short-term candlestick patterns (Trigger Entries) from this 5-Minute (5m) data.
-    Focus on single or double candlestick patterns indicating instant momentum shifts.
-    Examples: Dragonfly Doji, Gravestone Doji, Marubozu, Pin Bar, Hammer, Shooting Star, Three White Soldiers.
+    template = """
+    M15 Setup Context: {context}
+    M5 Data (Last 5 Candles):
+    {raw_data}
     
-    STRICT RULES:
-    - DO NOT analyze macro trends or large chart patterns.
-    - You are the final executor. Specify the exact candlestick pattern appearing in the last 1-3 candles.
+    Task: Identify a candlestick trigger (e.g., Engulfing, Marubozu).
+    Generate precise price levels for execution.
     
-    You MUST strictly reply with the following pure JSON format:
-    {{
-        "candlestick_trigger": "Specific pattern name (or 'No trigger')",
-        "signal": "Bullish / Bearish / Neutral",
-        "brief_analysis": "Momentum reasoning based on the body and shadow of the latest candles"
-    }}
-    {format_instructions}
+    Strict Format: PATTERN: [Name] | ENTRY: [Price] | SL: [Price] | TP: [Price]
     """
     
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", system_prompt),
-        ("human", "Analyze these last 5 5m candles:\n{data}")
-    ]).partial(format_instructions=parser.get_format_instructions())
+    prompt = PromptTemplate.from_template(template)
+    response = (prompt | llm).invoke({
+        "asset": asset, 
+        "context": context, 
+        "raw_data": raw_data
+    }).content.strip().upper()
     
-    # The sniper only needs the last 5 candles. Historical macro data is irrelevant here.
-    data_text = df_5m.tail(5).to_string()
-    
-    try:
-        return (prompt | llm | parser).invoke({"data": data_text})
-    except Exception as e:
-        return {
-            "candlestick_trigger": "Error", 
-            "signal": "Neutral", 
-            "brief_analysis": f"Sniper vision failed: {e}"
-        }
+    print(f"[M5_RESULT] Trigger generated: {response}")
+    return {
+        "trigger_m5": response, 
+        "execution_logs": [f"Entry trigger identified: {response}"]
+    }

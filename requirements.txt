@@ -2,7 +2,7 @@ ccxt
 pandas
 ta
 langchain
-langchain-openai
+langchain-groq
 python-dotenv
 requests
 langgraph

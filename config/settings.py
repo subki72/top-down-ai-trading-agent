@@ -1,27 +1,23 @@
 import os
 from dotenv import load_dotenv
 
-# 1. Load environment variables from .env file
 load_dotenv()
 
-# 2. Retrieve API Keys and Tokens
+# API Keys and Security
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-# ==========================================
-# 3. TRADING SYSTEM CONFIGURATION
-# ==========================================
-SYMBOL = 'BTC/USDT'
+# Global Trading Parameters
+SYMBOL = 'SOL/USDT'
 LIMIT_CANDLES = 100
 
-# Top-Down Analysis Timeframes
-TF_MACRO = '1h'    # For Trend Agent
-TF_MICRO = '15m'   # For Pattern Agent
-TF_TRIGGER = '5m'  # For Sniper/Trigger Agent
+# Timeframe Configuration
+TF_MACRO = '1h'    
+TF_MICRO = '15m'   
+TF_TRIGGER = '5m'  
 
-# ==========================================
-# 4. GUARDRAILS / RISK MANAGEMENT CONFIGURATION
-# ==========================================
+# Technical Thresholds
+MIN_RR_RATIO = 1.5
 RSI_OVERSOLD = 30
 RSI_OVERBOUGHT = 70

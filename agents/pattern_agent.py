@@ -1,51 +1,43 @@
-# agents/pattern_agent.py
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
-from config.settings import GROQ_API_KEY
+from langchain_groq import ChatGroq
+from langchain_core.prompts import PromptTemplate
+from state import TradingState
 
-def analyze_chart_pattern(df_15m):
-    print("[AGENT 2] Structure Specialist is searching for Chart Patterns on the 15m timeframe...")
+def analyze_market_structure_m15(state: TradingState):
+    """
+    Detects Chart Patterns and Smart Money Concepts (SMC) on the M15 timeframe.
+    Ensures the setup aligns with the identified macro trend.
+    """
+    asset = state['asset_pair']
+    trend = state['macro_trend_h1']
+    raw_data = state['data_m15_raw']
+    print(f"[M15_AGENT] Searching for {trend} setups...")
     
-    llm = ChatOpenAI(
-        api_key=GROQ_API_KEY, 
-        base_url="https://api.groq.com/openai/v1", 
-        model="llama-3.1-8b-instant", 
-        temperature=0.0
-    )
-    parser = JsonOutputParser()
+    llm = ChatGroq(temperature=0, model_name="llama-3.3-70b-versatile")
     
-    system_prompt = """
-    You are a Price Structure Specialist (Pattern Agent).
-    Your ONLY task is to identify macro Chart Patterns from this 15-Minute (15m) candlestick data.
-    Focus on structural formations such as: Double Top, Double Bottom, Head and Shoulders, Wedge, or Triangle.
+    template = """
+    Macro Trend Context: {trend}
+    Asset: {asset}
+    M15 Data (Last 20 Candles):
+    {raw_data}
     
-    STRICT RULES:
-    - DO NOT analyze single candlesticks (like Doji, Hammer, Engulfing). Ignore them completely.
-    - Focus solely on price swings (Swing Highs and Swing Lows).
+    Task: Identify Chart Patterns (Flags, Triangles, etc.) or SMC (Order Blocks, FVG).
+    The pattern MUST align with the Macro Trend.
     
-    You MUST strictly reply with the following pure JSON format:
-    {{
-        "chart_pattern": "Name of the pattern (or 'No clear pattern')",
-        "structural_phase": "Formation / Breakout / Retest / Consolidation",
-        "brief_analysis": "Logical reasoning based on High and Low movements"
-    }}
-    {format_instructions}
+    Format: [VALID/INVALID] - [Pattern Name] - [Brief justification, max 10 words]
     """
     
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", system_prompt),
-        ("human", "Analyze these last 50 15m candles:\n{data}")
-    ]).partial(format_instructions=parser.get_format_instructions())
+    prompt = PromptTemplate.from_template(template)
+    response = (prompt | llm).invoke({
+        "asset": asset, 
+        "trend": trend, 
+        "raw_data": raw_data
+    }).content.strip().upper()
     
-    # Extract 50 candles to ensure structural formations are clearly visible
-    data_text = df_15m.tail(50).to_string()
+    is_valid = response.startswith("VALID")
+    print(f"[M15_RESULT] Setup Validation: {is_valid} ({response})")
     
-    try:
-        return (prompt | llm | parser).invoke({"data": data_text})
-    except Exception as e:
-        return {
-            "chart_pattern": "Error", 
-            "structural_phase": "-", 
-            "brief_analysis": f"Failed to read structure: {e}"
-        }
+    return {
+        "is_m15_setup_valid": is_valid, 
+        "micro_signal_m15": response, 
+        "execution_logs": [f"M15 setup analysis: {response}"]
+    }
