@@ -32,4 +32,3 @@ jobs:
           LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
           LANGCHAIN_PROJECT: ${{ secrets.LANGCHAIN_PROJECT }}
         run: python main.py
-
