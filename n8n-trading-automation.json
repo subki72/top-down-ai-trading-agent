@@ -1,0 +1,278 @@
+{
+  "name": "Trigger TradingView",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "247ba3e3-e8da-4fbb-b12f-ce3e88685e2e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "49e399a0-8309-450c-947e-97c81e132982",
+      "name": "Webhook",
+      "webhookId": "247ba3e3-e8da-4fbb-b12f-ce3e88685e2e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "91ca898a-f59e-46a6-abb3-4f9b3dc56c20",
+              "name": "token_name",
+              "value": "={{ $json.body.coin }}",
+              "type": "string"
+            },
+            {
+              "id": "46864d12-b8a4-4432-92af-7ddb47d475ad",
+              "name": "entry_price",
+              "value": "={{ $json.body.price }}",
+              "type": "string"
+            },
+            {
+              "id": "921363fa-9962-4803-970d-fddb74077ee6",
+              "name": "timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": "={{ false }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        0
+      ],
+      "id": "144ac79b-81d3-44d3-aad1-5a1320362133",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "db517a2b-a74c-4990-9ead-43804e57b22c",
+              "leftValue": "={{ $json.token_name }}",
+              "rightValue": "=SOL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "2bac48d0-b27b-4a99-85b5-eb3464a65f0b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ickXC6sNblwATsyYDPuS4vusfgFLAfQ7VQsat1dJoaQ",
+          "mode": "list",
+          "cachedResultName": "Log Trading Otonom",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ickXC6sNblwATsyYDPuS4vusfgFLAfQ7VQsat1dJoaQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ickXC6sNblwATsyYDPuS4vusfgFLAfQ7VQsat1dJoaQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Waktu": "={{ $json.timestamp }}",
+            "Harga Entry": "={{ $json.entry_price }}",
+            "Koin": "={{ $json.token_name }}",
+            "Aksi": "BUY"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Waktu",
+              "displayName": "Waktu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Koin",
+              "displayName": "Koin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Harga Entry",
+              "displayName": "Harga Entry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Aksi",
+              "displayName": "Aksi",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        704,
+        -16
+      ],
+      "id": "40ebfcbd-4c6b-4067-8683-9eb20fc4d543",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zI0AAq6qIxFow39p",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/repos/subki72/top-down-ai-trading-agent/dispatches",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_GITHUB_TOKEN_HERE"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            },
+            {
+              "name": "User-Agent",
+              "value": "n8n-trading-bot"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"event_type\": \"execute_trade\",\n  \"client_payload\": {\n    \"coin\": \"{{ $json.token_name }}\",\n    \"price\": \"{{ $json.entry_price }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        992,
+        -16
+      ],
+      "id": "eff5ed1d-b89e-4c26-8a4f-650e16a94e12",
+      "name": "Trigger GitHub Actions"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Trigger GitHub Actions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger GitHub Actions": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e1d90ded-a448-4c85-8dc9-4b87fd882ffb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d5c9da387df069af9bca78c7ffa55c760a16f409d113cbc4ea3ccaeaa8496e5d"
+  },
+  "id": "EnlWzykLoCNspAsG",
+  "tags": []
+}
