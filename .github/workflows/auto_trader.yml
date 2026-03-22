@@ -3,8 +3,10 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  repository_dispatch:
+    types: [execute_trade]
+    
 jobs:
-
   execute-trading-cycle:
     runs-on: ubuntu-latest
     steps:
