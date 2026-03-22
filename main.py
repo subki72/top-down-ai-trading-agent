@@ -8,14 +8,17 @@ def run_trading_session():
     """
     # Injection of API Credentials into the session environment
     os.environ["GROQ_API_KEY"] = GROQ_API_KEY
-    
+    target_coin = os.environ.get("COIN_SYMBOL", SYMBOL)
+    target_price = os.environ.get("ENTRY_PRICE", "0")
     print("-" * 45)
-    print(f"SYSTEM BOOT: AUTOMATED TRADING FIRM ({SYMBOL})")
+    print(f"SYSTEM BOOT: AUTOMATED TRADING FIRM ({target_coin})") 
+    if target_price != "0":
+        print(f"TARGET ENTRY PRICE: {target_price}")
     print("-" * 45)
 
     # Initializing the empty state for the current run
     initial_context = {
-        "asset_pair": SYMBOL,
+        "asset_pair": target_coin, 
         "data_h1_raw": "",
         "data_m15_raw": "",
         "data_m5_raw": "",
@@ -27,7 +30,7 @@ def run_trading_session():
         "rr_ratio": 0.0,
         "final_action": "IDLE",
         "indicators": {},
-        "execution_logs": ["Session initiated via main.py"]
+        "execution_logs": [f"Session initiated via main.py for {target_coin}"]
     }
 
     try:
