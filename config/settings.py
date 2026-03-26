@@ -9,13 +9,17 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # Global Trading Parameters
-SYMBOL = 'SOL/USDT'
-LIMIT_CANDLES = 100
+SYMBOL = 'TAO/USD'
 
-# Timeframe Configuration
+# Timeframe Configuration & Dynamic Candle Limits
 TF_MACRO = '1h'    
+LIMIT_MACRO = 60 
+
 TF_MICRO = '15m'   
+LIMIT_MICRO = 20   
+
 TF_TRIGGER = '5m'  
+LIMIT_TRIGGER = 5 
 
 # Technical Thresholds
 MIN_RR_RATIO = 1.5

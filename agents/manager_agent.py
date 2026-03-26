@@ -3,12 +3,7 @@ from langchain_core.prompts import PromptTemplate
 from state import TradingState
 
 def synthesize_final_report(state: TradingState):
-    """
-    Acts as the Chief Investment Officer (CIO).
-    Provides the final professional reasoning for the system's decision.
-    """
-    print("[CEO_AGENT] Compiling executive synthesis...")
-    
+    print("[CIO_AGENT] Compiling executive synthesis...")
     llm = ChatGroq(temperature=0, model_name="llama-3.1-8b-instant")
     
     template = """
@@ -21,7 +16,7 @@ def synthesize_final_report(state: TradingState):
     - Final Action: {action}
 
     Requirement: Provide a professional reasoning (max 2 sentences). 
-    Focus on confluence and risk mitigation.
+    Focus on confluence and risk mitigation. If rejected, state why.
     """
     
     prompt = PromptTemplate.from_template(template)

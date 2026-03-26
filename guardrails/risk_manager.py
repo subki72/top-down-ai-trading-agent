@@ -2,28 +2,32 @@ import re
 from state import TradingState
 from config.settings import MIN_RR_RATIO
 
+def safe_extract_price(pattern, text):
+    match = re.search(pattern, text, re.IGNORECASE)
+    return float(match.group(1)) if match else None
+
 def validate_risk_reward(state: TradingState):
-    """
-    Parses the entry trigger and calculates the mathematical Risk-to-Reward ratio.
-    Ensures the trade meets the minimum threshold defined in settings.
-    """
     print("[RISK_MANAGER] Evaluating trade feasibility...")
     signal = state['trigger_m5']
     
     try:
-        # Extracting numerical values using regular expressions
-        entry = float(re.search(r'ENTRY:\s*([\d.]+)', signal).group(1))
-        sl = float(re.search(r'SL:\s*([\d.]+)', signal).group(1))
-        tp = float(re.search(r'TP:\s*([\d.]+)', signal).group(1))
+        entry = safe_extract_price(r'ENTRY\s*[:=-]?\s*([\d.]+)', signal)
+        sl = safe_extract_price(r'SL\s*[:=-]?\s*([\d.]+)', signal)
+        tp = safe_extract_price(r'TP\s*[:=-]?\s*([\d.]+)', signal)
         
-        # Calculating absolute distance for risk and reward
+        if entry is None or sl is None or tp is None:
+            print("[RISK_MANAGER] Warning: AI did not provide clear Entry/SL/TP values.")
+            return {
+                "is_risk_reward_valid": False,
+                "rr_ratio": 0.0,
+                "final_action": "REJECT_INVALID_FORMAT",
+                "execution_logs": ["Risk guardrail rejected: Missing price data from AI"]
+            }
+        
         risk = abs(entry - sl)
         reward = abs(tp - entry)
-        
-        # Calculating the ratio (Reward / Risk)
         rr_ratio = round(reward / risk, 2) if risk != 0 else 0
         
-        # Validation against the global threshold
         is_valid = rr_ratio >= MIN_RR_RATIO
         action = "EXECUTE_TRADE" if is_valid else "REJECT_BAD_RR"
         
@@ -42,5 +46,5 @@ def validate_risk_reward(state: TradingState):
             "is_risk_reward_valid": False, 
             "rr_ratio": 0.0, 
             "final_action": "CALCULATION_ERROR", 
-            "execution_logs": ["Risk guardrail error: Invalid signal format"]
+            "execution_logs": [f"Risk guardrail critical error: {str(e)}"]
         }
