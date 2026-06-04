@@ -1,11 +1,11 @@
 name: AI Auto Trader
 on:
   # To enable the agent again, uncomment the push and repository_dispatch lines below:
-  # push:
-  #   branches: [ main ]
+  push:
+    branches: [ main ]
   workflow_dispatch:
-  # repository_dispatch:
-  #   types: [execute_trade]
+  repository_dispatch:
+    types: [execute_trade]
     
 jobs:
   execute-trading-cycle:
