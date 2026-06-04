@@ -1,16 +1,8 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { getSupabase } from '../lib/supabase'
+import { NavLink, Outlet } from 'react-router-dom'
 import { useState } from 'react'
 
 export default function Layout() {
-  const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const handleSignOut = async () => {
-    const supabase = getSupabase()
-    if (supabase) await supabase.auth.signOut()
-    navigate('/')
-  }
 
   return (
     <>
@@ -52,12 +44,6 @@ export default function Layout() {
               AI News Feed
             </NavLink>
           </nav>
-
-          <div className="sidebar-footer">
-            <button className="btn btn-ghost" onClick={handleSignOut} style={{ width: '100%' }}>
-              🚪 Sign Out
-            </button>
-          </div>
         </aside>
 
         {/* Main Content */}
