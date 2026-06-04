@@ -13,6 +13,11 @@ def run_news_pipeline():
     
     Designed to run via GitHub Actions cron at 01:00 UTC (08:00 WIB).
     """
+    # Validate required environment variables
+    if not GROQ_API_KEY:
+        print("[FATAL] GROQ_API_KEY not set!")
+        sys.exit(1)
+    
     os.environ["GROQ_API_KEY"] = GROQ_API_KEY
     
     print("=" * 50)
@@ -24,8 +29,8 @@ def run_news_pipeline():
     raw_articles = fetch_crypto_news(hours_back=24)
     
     if not raw_articles:
-        print("[PIPELINE] No articles found. Exiting.")
-        return
+        print("[PIPELINE] No articles found. This may indicate an issue.")
+        sys.exit(0)  # Not an error, just no news
     
     print(f"[PIPELINE] Found {len(raw_articles)} raw articles")
     
@@ -35,11 +40,15 @@ def run_news_pipeline():
     
     if not classified_articles:
         print("[PIPELINE] Classification returned empty. Exiting.")
-        return
+        sys.exit(1)
     
     # Step 3: Insert into Supabase
     print("\n[STEP 3] Storing in Supabase...")
     result = insert_news_articles(classified_articles)
+    
+    if not result:
+        print("[FATAL] Failed to insert articles into Supabase!")
+        sys.exit(1)
     
     # Summary
     categories = {}
