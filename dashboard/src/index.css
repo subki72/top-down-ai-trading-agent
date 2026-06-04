@@ -767,6 +767,198 @@ a:hover {
   }
 }
 
+/* ======================== */
+/* Expand Button            */
+/* ======================== */
+
+.expand-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+.expand-btn:hover {
+  background: rgba(0, 212, 255, 0.12);
+  border-color: var(--accent-cyan);
+  transform: scale(1.1);
+}
+
+/* ======================== */
+/* Modal Overlay            */
+/* ======================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-lg);
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 680px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: var(--space-xl);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(0, 212, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+.modal-close-btn:hover {
+  background: rgba(255, 82, 82, 0.15);
+  border-color: var(--sent-bearish);
+  color: var(--sent-bearish);
+}
+
+.modal-timestamp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.modal-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.modal-section-full {
+  margin-bottom: var(--space-md);
+}
+
+.modal-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.modal-section-body {
+  color: var(--text-primary);
+}
+
+.modal-detail-text {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  word-break: break-word;
+}
+
+.modal-logs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--space-sm);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-sm);
+}
+
+.modal-log-entry {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-left: 2px solid var(--border-subtle);
+}
+
+/* ======================== */
+/* Page Header Icons        */
+/* ======================== */
+
+.page-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stat-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* ======================== */
+/* News Card Link Icon      */
+/* ======================== */
+
+.news-card-title a {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.news-card-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

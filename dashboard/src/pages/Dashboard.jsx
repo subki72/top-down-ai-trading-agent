@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getSupabase } from '../lib/supabase'
 import SignalCard from '../components/SignalCard'
+import { IconSignal, IconCheckCircle, IconXCircle, IconClock } from '../components/Icons'
 
 export default function Dashboard() {
   const [signals, setSignals] = useState([])
@@ -72,7 +73,7 @@ export default function Dashboard() {
   return (
     <>
       <div className="page-header">
-        <h2>📊 Trading Signals</h2>
+        <h2><IconSignal size={24} color="var(--accent-cyan)" /> Trading Signals</h2>
         <p>Real-time decisions from your AI trading firm</p>
       </div>
 
@@ -80,21 +81,21 @@ export default function Dashboard() {
       <div className="stats-row">
         <div className="stat-card glass-card animate-in stagger-1">
           <div className="stat-value gradient-text">{stats.total}</div>
-          <div className="stat-label">Total Signals</div>
+          <div className="stat-label"><IconSignal size={12} /> Total Signals</div>
         </div>
         <div className="stat-card glass-card animate-in stagger-2">
           <div className="stat-value" style={{ color: 'var(--action-execute)' }}>{stats.executes}</div>
-          <div className="stat-label">Executions</div>
+          <div className="stat-label"><IconCheckCircle size={12} color="var(--action-execute)" /> Executions</div>
         </div>
         <div className="stat-card glass-card animate-in stagger-3">
           <div className="stat-value" style={{ color: 'var(--action-reject)' }}>{stats.rejects}</div>
-          <div className="stat-label">Rejections</div>
+          <div className="stat-label"><IconXCircle size={12} color="var(--action-reject)" /> Rejections</div>
         </div>
         <div className="stat-card glass-card animate-in stagger-4">
           <div className="stat-value" style={{ color: 'var(--accent-cyan)', fontSize: '0.9rem', fontWeight: 600 }}>
             {formatLastUpdate(stats.lastUpdate)}
           </div>
-          <div className="stat-label">Last Update</div>
+          <div className="stat-label"><IconClock size={12} /> Last Update</div>
         </div>
       </div>
 
@@ -106,7 +107,7 @@ export default function Dashboard() {
         </div>
       ) : signals.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">📡</div>
+          <div className="empty-state-icon"><IconSignal size={48} color="var(--text-muted)" /></div>
           <p>No trading signals yet.</p>
           <p style={{ marginTop: 4, fontSize: '0.8rem' }}>Signals will appear here when the bot runs.</p>
         </div>
