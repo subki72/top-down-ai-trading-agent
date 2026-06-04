@@ -8,6 +8,10 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
+# Supabase Configuration
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
 # Global Trading Parameters
 SYMBOL = 'TAO/USD'
 

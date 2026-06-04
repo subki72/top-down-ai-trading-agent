@@ -1,5 +1,6 @@
 # Security / Environment Variables
 .env
+dashboard/.env
 
 # Virtual Environments
 venv/
