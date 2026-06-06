@@ -2,6 +2,7 @@ name: AI Auto Trader
 on:
   schedule:
     - cron: '0 * * * *'  # Run every hour
+  # Force GitHub to re-register the cron schedule
   # To enable the agent again, uncomment the push and repository_dispatch lines below:
   push:
     branches: [ main ]
