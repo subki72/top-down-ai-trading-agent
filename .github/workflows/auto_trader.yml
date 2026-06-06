@@ -1,5 +1,7 @@
 name: AI Auto Trader
 on:
+  schedule:
+    - cron: '0 * * * *'  # Run every hour
   # To enable the agent again, uncomment the push and repository_dispatch lines below:
   push:
     branches: [ main ]

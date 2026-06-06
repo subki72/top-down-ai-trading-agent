@@ -78,14 +78,22 @@ Example: [{{"index": 0, "category": "FUNDAMENTAL_MACRO", "sentiment": "BEARISH",
                 idx = classification.get("index", -1)
                 if 0 <= idx < len(batch):
                     original = batch[idx]
+                    category_val = classification.get("category", "FUNDAMENTAL_MACRO")
+                    if category_val not in ["TECHNICAL", "FUNDAMENTAL_MACRO", "FUNDAMENTAL_ONCHAIN"]:
+                        category_val = "FUNDAMENTAL_MACRO"
+                        
+                    sentiment_val = classification.get("sentiment", "NEUTRAL")
+                    if sentiment_val not in ["BULLISH", "BEARISH", "NEUTRAL"]:
+                        sentiment_val = "NEUTRAL"
+                        
                     classified_articles.append({
                         "title": original["title"],
                         "source": original["source"],
                         "url": original["url"],
                         "published_at": original["published_at"],
                         "summary": classification.get("summary", original["title"]),
-                        "category": classification.get("category", "FUNDAMENTAL_MACRO"),
-                        "sentiment": classification.get("sentiment", "NEUTRAL"),
+                        "category": category_val,
+                        "sentiment": sentiment_val,
                         "relevance_score": 0.8
                     })
                     
