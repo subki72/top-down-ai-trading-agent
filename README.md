@@ -11,7 +11,7 @@ An institutional-grade, multi-agent automated crypto trading firm built on a **T
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TD
