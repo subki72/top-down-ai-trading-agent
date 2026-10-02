@@ -1,4 +1,4 @@
-# 🚀 Top-Down AI Trading Agent (LangGraph Architecture)
+# Top-Down AI Trading Agent (LangGraph Architecture)
 
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/orchestration-LangGraph-purple.svg)](https://github.com/langchain-ai/langgraph)
@@ -61,7 +61,7 @@ graph TD
 
 ---
 
-## 🌟 Key Capabilities & Technical Highlights
+## Key Capabilities & Technical Highlights
 
 ### 1. Multi-Agent Top-Down Analysis Engine
 - **H1 Macro Strategist (`Llama-3.3-70B`)**: Assesses macro trend bias (`BULLISH`, `BEARISH`, `SIDEWAYS`) and key EMA/RSI market structures. Automatically aborts on uncertain regimes to conserve compute and avoid false breakouts.
@@ -93,7 +93,7 @@ graph TD
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 ├── agents/                     # LangGraph specialized AI agents
@@ -144,7 +144,7 @@ graph TD
 
 ---
 
-## ⚡ Quick Start & Local Development
+##  Quick Start & Local Development
 
 ### 1. Prerequisites
 - **Python**: 3.11 or higher
@@ -224,7 +224,7 @@ python news_pipeline.py
 
 ---
 
-## 🖥️ Running the Web Dashboard
+## Running the Web Dashboard
 
 ```bash
 cd dashboard
@@ -235,7 +235,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser to view the 
 
 ---
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 Run the system inside isolated Docker containers:
 ```bash
@@ -244,7 +244,7 @@ docker-compose up --build -d
 
 ---
 
-## 📊 Automated Quality & Readability Audits
+## Automated Quality & Readability Audits
 
 This codebase adheres to institutional readability standards and continuous quality evaluation:
 - **Production Readiness Score**: **90.0 / 100** (Comprehensive verification across 50 automated tests, deterministic risk guardrails, and enterprise resilience patterns).
@@ -252,6 +252,6 @@ This codebase adheres to institutional readability standards and continuous qual
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This software is developed strictly for **educational, experimental, and research purposes**. Cryptocurrency trading carries high financial risk. Large Language Models may produce unpredictable outputs under extreme market volatility. Always perform thorough backtesting and risk management before deploying any autonomous trading software with real capital.
