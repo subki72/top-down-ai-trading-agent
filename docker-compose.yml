@@ -1,0 +1,14 @@
+services:
+  ai-trader:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai_trading_agent
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - LOG_LEVEL=INFO
+      - PYTHONUNBUFFERED=1

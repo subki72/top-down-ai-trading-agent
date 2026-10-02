@@ -5,9 +5,9 @@ import { IconNews, IconWrench, IconGlobe, IconChain, IconFilter } from '../compo
 
 const CATEGORIES = [
   { key: 'ALL', label: 'All', icon: IconFilter },
-  { key: 'TECHNICAL', label: 'Teknikal', icon: IconWrench },
-  { key: 'FUNDAMENTAL_MACRO', label: 'Makro', icon: IconGlobe },
-  { key: 'FUNDAMENTAL_ONCHAIN', label: 'Onchain', icon: IconChain }
+  { key: 'TECHNICAL', label: 'Technical', icon: IconWrench },
+  { key: 'FUNDAMENTAL_MACRO', label: 'Macro', icon: IconGlobe },
+  { key: 'FUNDAMENTAL_ONCHAIN', label: 'On-Chain', icon: IconChain }
 ]
 
 export default function News() {
@@ -60,15 +60,15 @@ export default function News() {
   const computeStats = (data) => {
     setStats({
       total: data.length,
-      technical: data.filter(a => a.category === 'TECHNICAL').length,
-      macro: data.filter(a => a.category === 'FUNDAMENTAL_MACRO').length,
-      onchain: data.filter(a => a.category === 'FUNDAMENTAL_ONCHAIN').length
+      technical: data.filter(article => article.category === 'TECHNICAL').length,
+      macro: data.filter(article => article.category === 'FUNDAMENTAL_MACRO').length,
+      onchain: data.filter(article => article.category === 'FUNDAMENTAL_ONCHAIN').length
     })
   }
 
   const filteredArticles = activeFilter === 'ALL'
     ? articles
-    : articles.filter(a => a.category === activeFilter)
+    : articles.filter(article => article.category === activeFilter)
 
   return (
     <>
@@ -85,15 +85,15 @@ export default function News() {
         </div>
         <div className="stat-card glass-card animate-in stagger-2">
           <div className="stat-value" style={{ color: 'var(--cat-technical)' }}>{stats.technical}</div>
-          <div className="stat-label"><IconWrench size={12} color="var(--cat-technical)" /> Teknikal</div>
+          <div className="stat-label"><IconWrench size={12} color="var(--cat-technical)" /> Technical</div>
         </div>
         <div className="stat-card glass-card animate-in stagger-3">
           <div className="stat-value" style={{ color: 'var(--cat-macro)' }}>{stats.macro}</div>
-          <div className="stat-label"><IconGlobe size={12} color="var(--cat-macro)" /> Makro</div>
+          <div className="stat-label"><IconGlobe size={12} color="var(--cat-macro)" /> Macro</div>
         </div>
         <div className="stat-card glass-card animate-in stagger-4">
           <div className="stat-value" style={{ color: 'var(--cat-onchain)' }}>{stats.onchain}</div>
-          <div className="stat-label"><IconChain size={12} color="var(--cat-onchain)" /> Onchain</div>
+          <div className="stat-label"><IconChain size={12} color="var(--cat-onchain)" /> On-Chain</div>
         </div>
       </div>
 

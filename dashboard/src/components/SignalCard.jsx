@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { IconExpand, IconClose, IconTrendUp, IconTrendDown, IconTarget, IconShield, IconActivity, IconClock } from './Icons'
 
+const MIN_DESIRED_RR = 1.5
+
 export default function SignalCard({ signal, index }) {
   const [expanded, setExpanded] = useState(false)
 
@@ -23,7 +25,7 @@ export default function SignalCard({ signal, index }) {
   const formatTime = (dateStr) => {
     if (!dateStr) return '—'
     const d = new Date(dateStr)
-    return d.toLocaleString('id-ID', {
+    return d.toLocaleString('en-US', {
       day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
       timeZone: 'Asia/Jakarta'
@@ -136,7 +138,7 @@ export default function SignalCard({ signal, index }) {
                   <span>Risk / Reward Ratio</span>
                 </div>
                 <div className="modal-section-body">
-                  <span className="mono" style={{ fontSize: '1.5rem', fontWeight: 800, color: signal.rr_ratio >= 1.5 ? 'var(--sent-bullish)' : 'var(--sent-bearish)' }}>
+                  <span className="mono" style={{ fontSize: '1.5rem', fontWeight: 800, color: signal.rr_ratio >= MIN_DESIRED_RR ? 'var(--sent-bullish)' : 'var(--sent-bearish)' }}>
                     {signal.rr_ratio ? `1 : ${signal.rr_ratio}` : '—'}
                   </span>
                 </div>

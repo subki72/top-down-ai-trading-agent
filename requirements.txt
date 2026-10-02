@@ -1,9 +1,20 @@
-ccxt
-pandas
-ta
-langchain
-langchain-groq
-python-dotenv
-requests
-langgraph
-supabase
+# Core Orchestration & AI Engine
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-groq>=0.2.0
+langgraph>=0.2.0
+
+# Financial Data & Technical Indicators
+ccxt>=4.4.0
+pandas>=2.2.0
+ta>=0.11.0
+
+# Network, Resilience & Utilities
+requests>=2.31.0
+python-dotenv>=1.0.0
+tenacity>=8.2.0
+supabase>=2.3.0
+
+# Testing & Quality Assurance
+pytest>=8.0.0
+pytest-mock>=3.12.0

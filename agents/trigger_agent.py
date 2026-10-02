@@ -1,15 +1,20 @@
+import re
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from state import TradingState
+from config.settings import MODEL_SNIPER, API_TIMEOUT_SECONDS
+from config.logger import setup_logger
+from tools.resilience import retry_with_backoff
+
+logger = setup_logger("trigger_agent")
 
 def analyze_entry_trigger_m5(state: TradingState):
-    asset = state['asset_pair']
-    context = state['micro_signal_m15']
-    raw_data = state['data_m5_raw']
+    asset = state.get('asset_pair', 'UNKNOWN')
+    context = state.get('micro_signal_m15', '')
+    raw_data = state.get('data_m5_raw', '')
     ind_m5 = state.get('indicators', {}).get('M5', {})
     
-    print(f"[M5_AGENT] Calculating precision trigger for {asset}...")
-    llm = ChatGroq(temperature=0, model_name="llama-3.1-8b-instant")
+    logger.info(f"Calculating precision trigger for {asset} on M5 timeframe...")
 
     template = """
     M15 Setup Context: {context}
@@ -22,7 +27,7 @@ def analyze_entry_trigger_m5(state: TradingState):
     M5 Data (Last 5 Candles):
     {raw_data}
     
-    Task: Identify a candlestick trigger (e.g., Engulfing, Piercing Line).
+    Task: Identify a candlestick trigger (e.g., Engulfing, Piercing Line, Pinbar).
     1. Explain your reasoning analytically based on the pattern and momentum.
     2. Generate precise price levels for execution.
     
@@ -31,21 +36,37 @@ def analyze_entry_trigger_m5(state: TradingState):
     ANALYSIS: [Your detailed reasoning here]
     PATTERN: [Name] | ENTRY: [Price] | SL: [Price] | TP: [Price]
     """
-    
+
     prompt = PromptTemplate.from_template(template)
-    raw_response = (prompt | llm).invoke({
-        "asset": asset, 
-        "context": context, 
-        "raw_data": raw_data,
-        "rsi": ind_m5.get("rsi", "N/A"),
-        "macd": ind_m5.get("macd_hist", "N/A"),
-        "last_close": ind_m5.get("last_close", "N/A")
-    }).content.strip().upper()
     
-    clean_response = raw_response.replace("*", "").replace("#", "")
-    print(f"\n[M5_RESULT] Trigger generated:\n{'-'*40}\n{clean_response}\n{'-'*40}\n")
-    
-    return {
-        "trigger_m5": clean_response, 
-        "execution_logs": [f"Entry trigger identified:\n{clean_response}"]
-    }
+    @retry_with_backoff(max_attempts=3, initial_delay=1.0)
+    def call_llm():
+        llm = ChatGroq(
+            temperature=0,
+            model_name=MODEL_SNIPER,
+            request_timeout=API_TIMEOUT_SECONDS
+        )
+        return (prompt | llm).invoke({
+            "asset": asset, 
+            "context": context, 
+            "raw_data": raw_data,
+            "rsi": ind_m5.get("rsi", "N/A"),
+            "macd": ind_m5.get("macd_hist", "N/A"),
+            "last_close": ind_m5.get("last_close", "N/A")
+        }).content
+
+    try:
+        raw_response = call_llm()
+        clean_response = raw_response.replace("*", "").replace("#", "").strip()
+        logger.info(f"M5 Trigger Generated successfully. Snippet: {clean_response[:100]}...")
+        return {
+            "trigger_m5": clean_response, 
+            "execution_logs": [f"Entry trigger identified:\n{clean_response}"]
+        }
+    except Exception as e:
+        logger.error(f"M5 Trigger Agent failed: {str(e)}", exc_info=True)
+        fallback_msg = f"TRIGGER_FAILURE: Error generating trigger - {str(e)}"
+        return {
+            "trigger_m5": fallback_msg,
+            "execution_logs": [f"M5 trigger agent error: {str(e)}"]
+        }

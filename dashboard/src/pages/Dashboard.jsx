@@ -55,15 +55,15 @@ export default function Dashboard() {
 
   const updateStats = (data) => {
     const total = data.length
-    const executes = data.filter(s => s.final_action?.includes('EXECUTE')).length
-    const rejects = data.filter(s => s.final_action?.includes('REJECT')).length
+    const executes = data.filter(signal => signal.final_action?.includes('EXECUTE')).length
+    const rejects = data.filter(signal => signal.final_action?.includes('REJECT')).length
     const lastUpdate = data.length > 0 ? data[0].created_at : null
     setStats({ total, executes, rejects, lastUpdate })
   }
 
   const formatLastUpdate = (dateStr) => {
     if (!dateStr) return 'No data yet'
-    return new Date(dateStr).toLocaleString('id-ID', {
+    return new Date(dateStr).toLocaleString('en-US', {
       day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
       timeZone: 'Asia/Jakarta'

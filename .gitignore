@@ -1,25 +1,68 @@
-# Security / Environment Variables
+# ==============================================================================
+# Git Ignore Configuration - AI Trading Firm
+# ==============================================================================
+
+# Environment & Secret Variables (NEVER COMMIT)
 .env
+.env.local
+.env.*.local
+*.env
+!*.env.example
 dashboard/.env
+dashboard/.env.local
 
 # Virtual Environments
+.venv/
 venv/
 env/
-.venv/
+ENV/
 
-# Python Cache & Compiled Files
+# Python Bytecode & Cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
 
-# Jupyter Notebook Checkpoints
-.ipynb_checkpoints/
+# Testing & Coverage Artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
 
-# IDE & OS Files
+# Log Files & Runtime Traces
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node / Frontend Build Artifacts (Dashboard)
+node_modules/
+dist/
+build/
+.next/
+.out/
+
+# IDE & Operating System Files
 .vscode/
+!.vscode/extensions.json
 .idea/
+*.swp
+*.swo
+*~
 .DS_Store
+Thumbs.db
+ehthumbs.db
 
-# Exclude testing notebooks
+# Jupyter Notebook Checkpoints & Scratch
+.ipynb_checkpoints/
 notebooks/
+scratch/
+
+# Internal Documentation & Audits (Local Only - DO NOT PUSH)
+docs/
+qa-report/

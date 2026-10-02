@@ -4,11 +4,11 @@ export default function NewsCard({ article, index }) {
   const getCategoryBadge = (category) => {
     switch (category) {
       case 'TECHNICAL':
-        return { className: 'badge badge-technical', label: 'Teknikal', Icon: IconWrench, color: 'var(--cat-technical)' }
+        return { className: 'badge badge-technical', label: 'Technical', Icon: IconWrench, color: 'var(--cat-technical)' }
       case 'FUNDAMENTAL_MACRO':
-        return { className: 'badge badge-macro', label: 'Makro', Icon: IconGlobe, color: 'var(--cat-macro)' }
+        return { className: 'badge badge-macro', label: 'Macro', Icon: IconGlobe, color: 'var(--cat-macro)' }
       case 'FUNDAMENTAL_ONCHAIN':
-        return { className: 'badge badge-onchain', label: 'Onchain', Icon: IconChain, color: 'var(--cat-onchain)' }
+        return { className: 'badge badge-onchain', label: 'On-Chain', Icon: IconChain, color: 'var(--cat-onchain)' }
       default:
         return { className: 'badge badge-neutral', label: category || 'Unknown', Icon: IconActivity, color: 'var(--text-muted)' }
     }
@@ -35,7 +35,7 @@ export default function NewsCard({ article, index }) {
 
     if (diffMins < 60) return `${diffMins}m ago`
     if (diffHrs < 24) return `${diffHrs}h ago`
-    return d.toLocaleDateString('id-ID', {
+    return d.toLocaleDateString('en-US', {
       day: '2-digit', month: 'short',
       timeZone: 'Asia/Jakarta'
     })
