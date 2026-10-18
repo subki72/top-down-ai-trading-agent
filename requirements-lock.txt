@@ -1,0 +1,15 @@
+# Locked dependencies for top-down-ai-trading-agent
+langchain==0.3.14
+langchain-core==0.3.29
+langchain-groq==0.2.2
+langgraph==0.2.60
+ccxt==4.4.45
+pandas==2.2.3
+ta==0.11.0
+requests==2.32.3
+python-dotenv==1.0.1
+tenacity==9.0.0
+supabase==2.11.0
+pytest==8.3.4
+pytest-mock==3.14.0
+ruff==0.8.4

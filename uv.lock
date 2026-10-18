@@ -1,0 +1,20 @@
+version = 1
+requires-python = ">=3.10"
+
+[[package]]
+name = "langchain"
+version = "0.3.14"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://pypi.org/simple/langchain/langchain-0.3.14.tar.gz" }
+
+[[package]]
+name = "langgraph"
+version = "0.2.60"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://pypi.org/simple/langgraph/langgraph-0.2.60.tar.gz" }
+
+[[package]]
+name = "pandas"
+version = "2.2.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://pypi.org/simple/pandas/pandas-2.2.3.tar.gz" }
