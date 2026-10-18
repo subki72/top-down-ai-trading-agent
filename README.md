@@ -1,10 +1,11 @@
 # Top-Down AI Trading Agent (LangGraph Architecture)
 
+[![CI Pipeline](https://github.com/subki72/top-down-ai-trading-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/subki72/top-down-ai-trading-agent/actions)
+[![Maturity Grade: Production](https://img.shields.io/badge/Maturity%20Grade-Production%20(70.2%2F100)-success.svg)](https://github.com/subki72/top-down-ai-trading-agent)
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/orchestration-LangGraph-purple.svg)](https://github.com/langchain-ai/langgraph)
 [![Groq Llama 3](https://img.shields.io/badge/LLM-Groq%20Llama%203-orange.svg)](https://groq.com/)
 [![Tests](https://img.shields.io/badge/tests-50%2F50%20passing-brightgreen.svg)](tests/)
-[![Production Readiness](https://img.shields.io/badge/PRR%20Score-90.0%2F100-success.svg)](#-automated-quality--readability-audits)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 An institutional-grade, multi-agent automated crypto trading firm built on a **Top-Down Analysis** methodology. The system combines multi-timeframe LLM reasoning (Groq / Llama 3) with **mathematically deterministic risk guardrails**, enterprise resilience engineering (retries with backoff, circuit breakers, rate limiters), an automated daily AI news pipeline, and a modern real-time glassmorphism web dashboard.
@@ -96,6 +97,10 @@ graph TD
 ## Repository Structure
 
 ```text
+├── .github/workflows/          # CI/CD pipelines and scheduled triggers
+│   ├── auto_trader.yml         # Scheduled trading cycle runner
+│   ├── ci.yml                  # Automated linting & testing workflow
+│   └── news_fetcher.yml        # Scheduled daily crypto news pipeline
 ├── agents/                     # LangGraph specialized AI agents
 │   ├── macro_agent.py          # H1 Trend Strategist (Llama-3.3-70B)
 │   ├── micro_agent.py          # M15 Structure Analyst (Llama-3.3-70B)
@@ -118,6 +123,9 @@ graph TD
 │   └── qa-report/              # Readability & Consistency QA Audits (11/11 Resolved)
 ├── guardrails/                 # Deterministic execution safety
 │   └── risk_manager.py         # Position sizing, RR validation, geometry checks
+├── src/                        # Packaged entrypoint facade
+│   ├── __init__.py             # Package identifier
+│   └── trading_agent.py        # Library export facade
 ├── tests/                      # 50 Automated Pytest Cases
 │   ├── test_agent_parsers.py   # LLM output sanitization & regex parser tests
 │   ├── test_agent_routing.py   # StateGraph conditional edge tests
@@ -134,17 +142,55 @@ graph TD
 │   ├── resilience.py           # Circuit breaker, rate limiter, exponential retry
 │   ├── telegram_notifier.py    # Telegram Bot dispatch
 │   └── web_notifier.py         # Supabase signal dispatch
-├── main.py                     # Primary trading cycle entrypoint
-├── news_pipeline.py            # Daily news fetch & classification runner
-├── health_check.py             # Environment & connectivity diagnostics
-├── dry_run.py                  # Offline zero-API dry run simulation
+├── .env.example                # Centralized environment variable template
+├── .gitignore                  # Git exclusion rules
+├── .pre-commit-config.yaml     # Pre-commit git hooks configuration
+├── CHANGELOG.md                # Semantic versioning changelog
+├── CONTRIBUTING.md             # Developer contribution guidelines
 ├── docker-compose.yml          # Containerized deployment manifest
-└── requirements.txt            # Python dependencies
+├── Dockerfile                  # Container build instructions
+├── dry_run.py                  # Offline zero-API dry run simulation
+├── health_check.py             # Environment & connectivity diagnostics
+├── LICENSE                     # MIT License
+├── main.py                     # Primary trading cycle entrypoint
+├── Makefile                    # Single-command dev workflow targets
+├── news_pipeline.py            # Daily news fetch & classification runner
+├── pytest.ini                  # Pytest test execution config
+├── requirements-lock.txt       # Deterministic locked dependencies
+├── requirements.txt            # Python dependencies
+├── ruff.toml                   # Ruff linter and formatter configuration
+├── SECURITY.md                 # Vulnerability disclosure policy
+└── uv.lock                     # Fast package resolver lockfile
 ```
 
 ---
 
-##  Quick Start & Local Development
+## Quickstart & Local Development
+
+### Single-Command Workflow (Makefile)
+
+```bash
+# Clone the repository
+git clone https://github.com/subki72/top-down-ai-trading-agent.git
+cd top-down-ai-trading-agent
+
+# 1. Install locked dependencies:
+make install
+
+# 2. Run automated test suite:
+make test
+
+# 3. Code formatting & lint checks:
+make lint
+
+# 4. Run automated agent trading cycle:
+make run
+
+# 5. Build Docker container image:
+make docker-build
+```
+
+---
 
 ### 1. Prerequisites
 - **Python**: 3.11 or higher
@@ -249,6 +295,15 @@ docker-compose up --build -d
 This codebase adheres to institutional readability standards and continuous quality evaluation:
 - **Production Readiness Score**: **90.0 / 100** (Comprehensive verification across 50 automated tests, deterministic risk guardrails, and enterprise resilience patterns).
 - **Readability & Consistency Audit**: **11 / 11 Issues Resolved (100%)** (Standardized English UI labels, explicit tuple unpacking, named constants, module-level utility helpers, and wrapped multiline prompt templates).
+
+---
+
+## Security & Governance
+
+- **Vulnerability Disclosure**: Review our security reporting guidelines in [SECURITY.md](SECURITY.md).
+- **Contribution Guidelines**: Development setup and pull request etiquette in [CONTRIBUTING.md](CONTRIBUTING.md).
+- **Release Changelog**: Track semantic releases and version updates in [CHANGELOG.md](CHANGELOG.md).
+- **License**: Explicit open source licensing under the [MIT License](LICENSE).
 
 ---
 
