@@ -6,7 +6,7 @@ langgraph==0.2.60
 ccxt==4.4.45
 pandas==2.2.3
 ta==0.11.0
-requests==2.32.3
+requests==2.34.2
 python-dotenv==1.0.1
 tenacity==9.0.0
 supabase==2.11.0
