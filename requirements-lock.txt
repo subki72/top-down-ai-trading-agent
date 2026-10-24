@@ -1,6 +1,6 @@
 # Locked dependencies for top-down-ai-trading-agent
 langchain==0.3.14
-langchain-core==0.3.29
+langchain-core==1.6.12
 langchain-groq==0.2.2
 langgraph==0.2.60
 ccxt==4.4.45
