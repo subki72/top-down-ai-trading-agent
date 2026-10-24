@@ -8,7 +8,7 @@ ta==0.11.0
 requests==2.32.3
 python-dotenv==1.0.1
 tenacity==9.0.0
-supabase==2.11.0
+supabase==2.33.0
 pytest==8.3.4
 pytest-mock==3.14.0
 ruff==0.8.4
